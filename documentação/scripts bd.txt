@@ -1,0 +1,64 @@
+create table usuario (
+usu_id serial,
+usu_nome character varying,
+usu_sobrenome character varying,
+usu_login character varying,
+usu_senha character varying,
+usu_email character varying,
+usu_setor character varying,
+usu_ramal integer,
+usu_tipo char,
+usu_ativo char,
+usu_dataCadastrado timestamp,
+PRIMARY KEY (usu_id)
+);
+
+insert into usuario (usu_nome, usu_sobrenome, usu_login, usu_senha, usu_email, usu_setor, usu_ramal, usu_tipo, usu_ativo, 
+usu_dataCadastrado) values ('Lorem', 'Ipsum', 'usuario', md5('123456'), 'loremipsum@gmail.com', 'TI', '4567', 'A', 'S',
+current_timestamp);
+
+create table log_acesso (
+lac_id serial,
+lac_data timestamp,
+lac_usu_id integer,
+lac_ip character varying,
+PRIMARY KEY (lac_id),
+FOREIGN KEY (lac_usu_id) REFERENCES usuario(usu_id) 
+);
+
+insert into log_acesso (lac_data, lac_usu_id, lac_ip) values (current_timestamp, '1', '192.168.0.11');
+
+create table cod_seguranca (
+codseg_id serial,
+codseg_descricao character varying,
+codseg_usu_id integer,
+PRIMARY KEY (codseg_id),
+FOREIGN KEY (codseg_usu_id) REFERENCES usuario(usu_id) 
+);
+
+create table ocorrencia (
+oco_id serial,
+oco_relacionado character varying,
+oco_descricao character varying,
+oco_usu_id integer,
+oco_data timestamp,
+oco_ip character varying,
+oco_status character varying,
+oco_obs character varying,
+oco_atendente character varying,
+PRIMARY KEY (oco_id),
+FOREIGN KEY (oco_usu_id) REFERENCES usuario(usu_id) 
+);
+
+insert into ocorrencia (oco_referenciado, oco_descricao, oco_usu_id, oco_data, oco_ip, oco_status, oco_obs) values ('Internet', 
+'Sem acesso a internet', '7', current_timestamp, '192.168.0.15', 'Aberto', '');
+
+create table sugestao (
+sug_id serial,
+sug_descricao character varying,
+sug_usu_id integer,
+sug_data timestamp,
+sug_ip character varying,
+PRIMARY KEY (sug_id),
+FOREIGN KEY (sug_usu_id) REFERENCES usuario(usu_id) 
+);
